@@ -5,6 +5,7 @@ import java.awt.Toolkit;
 import java.awt.Toolkit.*;
 import java.awt.event.ActionEvent;
 import java.util.Random;
+
 import javax.tv.xlet.* ;
 import org.dvb.ui.* ;
 import org.havi.ui.* ;
@@ -21,11 +22,14 @@ Image ruit = tl.getImage("ruit.png");
 Image schoppe = tl.getImage("schoppe.png");
 Image hart = tl.getImage("hart.png");
 Image[] randomArray = {hart,ruit, schoppe};
-
+int totClick=0;
+int cardNumber=0;
 int fill = 0;
 int hartCheck = 0;
 int ruitCheck = 0;
 int schoppeCheck = 0;
+int clickNow = 0;
+boolean clkt = false;
 
 
 private boolean debug=true ;
@@ -164,10 +168,9 @@ do {
         } while (fill < 6);
         
     
-scene.add(knop1) ;
+
 scene.add(knop2) ;
-scene.add(time) ;
-scene.add(trys) ;
+
 //scene.add(tekstLabel ) ;
 scene.add(kaart[0]) ;
 scene.add(kaart[1]) ;
@@ -194,11 +197,88 @@ kaart[0].requestFocus( );
     }
   public void actionPerformed(ActionEvent e)
   {
-    System.out.println(e.getActionCommand());
+      
     
+      System.out.println(e.getActionCommand());
+         
+         System.out.println( clickNow);
+      Image compIm = null;
+      int active = 0;
+      
     int beest = Integer.parseInt(e.getActionCommand());
+    if (beest == 6){
+        Runtime.getRuntime().exit(1);
+    }
+    if( clickNow == 0 ){
+    if(beest < 6){ 
+        clickNow=0;
+       cardNumber=beest;
+       
     kaart[beest].setGraphicContent(kaart[beest].getGraphicContent(kaart[beest].ACTIONED_STATE),kaart[beest].NORMAL_STATE);
-
+    compIm = kaart[beest].getGraphicContent(kaart[beest].ACTIONED_STATE);
+    
+ 
+    System.out.println(clickNow);
+    clickNow++;
+    return;
+    
+  }}else if(clickNow == 1){
+    if(beest < 6){ 
+        
+     totClick++;
+     
+     kaart[beest].setGraphicContent(kaart[beest].getGraphicContent(kaart[beest].ACTIONED_STATE),kaart[beest].NORMAL_STATE);
+     if(kaart[beest].getGraphicContent(kaart[beest].ACTIONED_STATE) == kaart[cardNumber].getGraphicContent(kaart[cardNumber].ACTIONED_STATE) && beest != cardNumber){
+     kaart[beest].repaint();
+         System.out.println("toot2");
+     
+     clickNow = 0;
+     return ;
+     } else{
+         System.out.println("toot1"); 
+         kaart[beest].setGraphicContent(kaart[beest].getGraphicContent(kaart[beest].ACTIONED_STATE),kaart[beest].NORMAL_STATE);
+                    try {
+                        Thread.sleep(50);
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
+                    }
+         try {
+                        Thread.sleep(50);
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
+                    }
+         try {
+                        Thread.sleep(50);
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
+                    }
+         try {
+                        Thread.sleep(400);
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
+                    }
+         try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
+                    }
+         try {
+                        Thread.sleep(50);
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
+                    }
+        kaart[beest].setGraphicContent(achterkant,kaart[beest].NORMAL_STATE );
+        kaart[cardNumber].setGraphicContent(achterkant,kaart[cardNumber].NORMAL_STATE );
+        clickNow =0;
+        cardNumber=0;
+        return;
+        
+     }
+     
+     
+    } 
+  }
+    
   }
 public void startXlet( ) throws XletStateChangeException
 {
@@ -206,8 +286,8 @@ if(debug)System.out.println( " Xlet Starten " ) ;
 //Scene zichtbaar maken
 scene.validate( ) ;
 scene.setVisible(true) ;
-knop1.setActionCommand("knop1 actioned");
-knop1.addHActionListener(this);
+knop2.setActionCommand("6");
+knop2.addHActionListener(this);
 
     kaart[0].setActionCommand("0");
     kaart[0].addHActionListener(this);
